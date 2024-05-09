@@ -78,3 +78,36 @@ docker run -it \
     --network=pg-network \
     --name pgadmin \
     dpage/pgadmin4	
+
+
+python ingest_data.py \
+    --user=root \
+    --password=root \
+    --host=localhost \
+    --port=5432 \
+    --db=ny_taxi \
+    --table_name=yellow_taxi_trips \
+    --url="https://www.dropbox.com/scl/fi/gl6tl9sl8ruud5noitvg2/yellow_tripdata_2021-01.csv?rlkey=7if2eqvs7zva34wjrjrp8ewrd&st=4w46yr71&dl=1"
+
+python ingest_data.py \
+--user=root \
+--password=root \
+--host=localhost \
+--port=5432 \
+--db=ny_taxi \
+--table_name=yellow_taxi_trips
+
+docker build -t taxi_ingest:v001
+
+URL="https://github.com/DataTalksClub/nyc-tlc-data/releases/download/yellow/yellow_tripdata_2021-01.csv.gz"
+
+docker run -it \
+    --network=pg-network \
+    taxi_ingest:v001 \
+    --user=root \
+    --password=root \
+    --host=pg-database \
+    --port=5432 \
+    --db=ny_taxi \
+    --table_name=yellow_taxi_trips \
+    --url="${URL}"
