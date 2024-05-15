@@ -1,0 +1,2 @@
+# Ignore JSON files in the keys directory
+keys/*.json
